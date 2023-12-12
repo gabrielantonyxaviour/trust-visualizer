@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "../interface/IEIP721Visualizer.sol";
+import "../interface/IEIP712Visualizer.sol";
 
 contract RaribleEIP712Visualizer is IEIP712Visualizer {
     bytes4 public constant ETH_ASSET_CLASS = bytes4(keccak256("ETH"));

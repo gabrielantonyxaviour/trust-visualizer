@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "../interface/IEIP721Visualizer.sol";
+import "../interface/IEIP712Visualizer.sol";
 
 contract OneInchEIP712Visualizer is IEIP712Visualizer {
     bytes32 public constant DOMAIN_SEPARATOR =

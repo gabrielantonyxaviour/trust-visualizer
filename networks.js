@@ -10,7 +10,7 @@ const networks = {
     verifyApiKey: process.env.ETHERSCAN_API_KEY || "UNSET",
     chainId: 11155111,
     nativeCurrencySymbol: "ETH",
-    WAIT_BLOCK_CONFIRMATIONS: 3,
+    WAIT_BLOCK_CONFIRMATIONS: 4,
   },
   polygonzkEVMTestnet: {
     url: "https://rpc.public.zkevm-test.net/",
@@ -19,7 +19,7 @@ const networks = {
     verifyApiKey: process.env.ZKEVM_VERIFY_API_KEY || "UNSET",
     chainId: 1442,
     nativeCurrencySymbol: "ETH",
-    WAIT_BLOCK_CONFIRMATIONS: 3,
+    WAIT_BLOCK_CONFIRMATIONS: 4,
   },
 };
 
