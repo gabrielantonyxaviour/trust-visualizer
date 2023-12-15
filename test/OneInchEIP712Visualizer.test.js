@@ -17,9 +17,9 @@ describe("OneInchEIP712Visualizer", function () {
     ethers.BigNumber.from("0"),
     ethers.utils.solidityPack(["uint128", "uint128"], [9, 142])
   ];
-  const encodedWitouthLength= ethers.utils.defaultAbiCoder.encode(types, order);
   // To mimic Solidity's abi.encode in ethers.js, manually add the length of the dynamic data, "bytes" in types array,
   // to the start of the encoded output
+  const encodedWitouthLength= ethers.utils.defaultAbiCoder.encode(types, order);
   const lengthPadded = "0x0000000000000000000000000000000000000000000000000000000000000020";
   const encodedMessage = lengthPadded + encodedWitouthLength.slice(2); // Slice off the '0x' prefix
   const expectedInitialRateBump = ethers.BigNumber.from("50000");
@@ -33,28 +33,44 @@ describe("OneInchEIP712Visualizer", function () {
   });
 
   it("Should return the correct values when calling visualizeEIP712message", async function () {
-
-    const expectedAssetsInassetTokenAddress = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
-    const expectedAssetsInId = ethers.BigNumber.from("0");
-    const expectedAssetsInAmounts = [expectedMaxTakingAmount, expectedTakingAmount];
-    const expectedAssetsOutAssetTokenAddress = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
-    const expectedAssetsOutId = ethers.BigNumber.from("0");
-    const expectedAssetsOutAmounts = [ethers.BigNumber.from("1000000000000000000")];
-    const expectedLivenessFrom = ethers.BigNumber.from("1673548149");
-    const expectedLivenessTo = ethers.BigNumber.from("1673548329");
    
     const result = await OneInchEIP712Visualizer.visualizeEIP712Message(encodedMessage, DOMAIN_SEPARATOR);
+    
+    // Map the result to a more readable format
+    const mappedResult = {
+      assetsIn: result.assetsIn.map(([assetTokenAddress, id, amounts]) => ({assetTokenAddress, id, amounts})),
+      assetsOut: result.assetsOut.map(([assetTokenAddress, id, amounts]) => ({assetTokenAddress, id, amounts})),
+      liveness: {
+        from: result.liveness[0],
+        to: result.liveness[1]
+      }
+    };
+
+    const expectedResult = {
+      assetsIn: [
+        {
+          assetTokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          id: ethers.BigNumber.from("0"),
+          amounts: [
+            expectedMaxTakingAmount, 
+            expectedTakingAmount
+          ]
+        }
+      ],
+      assetsOut: [
+        {
+          assetTokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+          id: ethers.BigNumber.from("0"),
+          amounts: [ethers.BigNumber.from("1000000000000000000")]
+        }
+      ],
+      liveness: {
+        from: ethers.BigNumber.from("1673548149"),
+        to: ethers.BigNumber.from("1673548329")
+      }
+    }
    
-    expect(result.assetsIn[0].assetTokenAddress).to.equal(expectedAssetsInassetTokenAddress);
-    expect(result.assetsIn[0].id).to.equal(expectedAssetsInId);
-    expect(result.assetsIn[0].amounts[0]).to.equal(expectedAssetsInAmounts[0]);
-    expect(result.assetsIn[0].amounts[1]).to.equal(expectedAssetsInAmounts[1]);
-    expect(result.assetsOut[0].assetTokenAddress).to.equal(expectedAssetsOutAssetTokenAddress);
-    expect(result.assetsOut[0].id).to.equal(expectedAssetsOutId);
-    expect(result.assetsOut[0].amounts[0]).to.equal(expectedAssetsOutAmounts[0]);
-    expect(result.assetsOut[0].amounts[1]).to.be.undefined;
-    expect(result.liveness.from).to.equal(expectedLivenessFrom);
-    expect(result.liveness.to).to.equal(expectedLivenessTo);
+    expect(mappedResult).to.deep.equal(expectedResult);
   });
   it("Should revert when visualizing EIP712 message due to incorrect domain separator", async function () {
     const INCORRECT_DOMAIN_SEPARATOR = "0x36c25de3e541d5d970f66e4210d728721220fff5c077cc6cd008b3a0c62adab7";
