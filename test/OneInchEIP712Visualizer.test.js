@@ -1,6 +1,5 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
-const { json } = require("hardhat/internal/core/params/argumentTypes");
 
 describe("OneInchEIP712Visualizer", function () {
   let OneInchEIP712Visualizer;
@@ -18,7 +17,6 @@ describe("OneInchEIP712Visualizer", function () {
     ethers.BigNumber.from("0"),
     ethers.utils.solidityPack(["uint128", "uint128"], [9, 142])
   ];
-  //   console.log(order)
   const encodedWitouthLength= ethers.utils.defaultAbiCoder.encode(types, order);
   // To mimic Solidity's abi.encode in ethers.js, manually add the length of the dynamic data, "bytes" in types array,
   // to the start of the encoded output
@@ -44,7 +42,6 @@ describe("OneInchEIP712Visualizer", function () {
     const expectedAssetsOutAmounts = [ethers.BigNumber.from("1000000000000000000")];
     const expectedLivenessFrom = ethers.BigNumber.from("1673548149");
     const expectedLivenessTo = ethers.BigNumber.from("1673548329");
-    
    
     const result = await OneInchEIP712Visualizer.visualizeEIP712Message(encodedMessage, DOMAIN_SEPARATOR);
    
