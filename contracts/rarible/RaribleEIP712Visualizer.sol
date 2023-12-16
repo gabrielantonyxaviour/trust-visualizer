@@ -27,7 +27,7 @@ contract RaribleEIP712Visualizer is IEIP712Visualizer {
 
     struct Asset {
         AssetType assetType;
-        uint value;
+        uint256 value;
     }
 
     struct Order {
@@ -35,9 +35,9 @@ contract RaribleEIP712Visualizer is IEIP712Visualizer {
         Asset makeAsset;
         address taker;
         Asset takeAsset;
-        uint salt;
-        uint start;
-        uint end;
+        uint256 salt;
+        uint256 start;
+        uint256 end;
         bytes4 dataType;
         bytes data;
     }
@@ -50,7 +50,7 @@ contract RaribleEIP712Visualizer is IEIP712Visualizer {
     ) external view returns (Result memory) {
         require(
             domainHash == DOMAIN_SEPARATOR,
-            "1inchEIP712Visualizer: unsupported domain"
+            "RaribleEIP712Visualizer: unsupported domain"
         );
 
         Order memory order = abi.decode(encodedMessage, (Order));
@@ -116,7 +116,6 @@ contract RaribleEIP712Visualizer is IEIP712Visualizer {
             amounts: amounts
         });
 
-        return assets;
     }
 
     function buildERC20Asset(
@@ -133,7 +132,6 @@ contract RaribleEIP712Visualizer is IEIP712Visualizer {
             amounts: amounts
         });
 
-        return assets;
     }
 
     function buildERC1155Asset(
@@ -153,7 +151,6 @@ contract RaribleEIP712Visualizer is IEIP712Visualizer {
             amounts: amounts
         });
 
-        return assets;
     }
 
     function buildETHAsset(
