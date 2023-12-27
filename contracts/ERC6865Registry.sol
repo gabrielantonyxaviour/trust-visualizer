@@ -3,11 +3,17 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/**
+ * @title ERC6865Registry
+ * @dev This contract is used to store EIP-6865 implementations for different protocols by domain separator.
+ */
 contract ERC6865Registry is Ownable {
     // Mapping to store EIP-6865 implementations for different protocols by domain separator
     mapping(bytes32 => address) private implementations;
 
-    // Event to log the registration of a new EIP-6865 implementation
+    /**
+     * @dev Emitted when a new EIP-6865 implementation is registered.
+     */
     event ImplementationAdded(
         bytes32 indexed domainSeparator,
         address implementation
@@ -32,7 +38,11 @@ contract ERC6865Registry is Ownable {
         emit ImplementationAdded(domainSeparator, implementation);
     }
 
-    // Function to get the EIP-6865 implementation for a specific protocol
+    /**
+     * @dev Returns the EIP-6865 implementation for a specific protocol.
+     * @param domainSeparator The protocol domain separator.
+     * @return The address of the EIP-6865 implementation contract.
+     */
     function getImplementation(
         bytes32 domainSeparator
     ) external view returns (address) {
