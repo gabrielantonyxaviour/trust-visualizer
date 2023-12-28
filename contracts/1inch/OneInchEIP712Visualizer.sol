@@ -5,9 +5,10 @@ import "../interface/IEIP712Visualizer.sol";
 
 /**
  * @title OneInchEIP712Visualizer
+ * @author @SilviaMargaritaOcegueda
  * @dev This contract is used to visualize EIP-712 messages for 1inch protocol.
  * It decodes the encoded message and returns a more readable format.
- * Functions are based in the @1inch/fusion-sdk library.
+ * Functions are based in the 1inch/fusion-sdk library.
  * The main part of the encoded message is the salt which encapsulates:
  * - auction start time
  * - duration of an auction
