@@ -1,11 +1,13 @@
 const { ethers } = require("hardhat");
 
+// Helper function to get the bytes4 asset class from the asset type
 function getAssetClass(assetType) {
   return ethers.utils
     .keccak256(ethers.utils.toUtf8Bytes(assetType))
     .slice(0, 10);
 }
 
+// Order Types
 const types = [
   "address",
   {
@@ -46,6 +48,7 @@ const types = [
   "bytes",
 ];
 
+// Order data where ERC115 is received and ETH is sent
 const orderErc1155InEthOutStruct = {
   maker: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", // replace with actual address
   makeAsset: {
@@ -87,6 +90,7 @@ const orderErc1155InEthOut = [
   orderErc1155InEthOutStruct.data,
 ];
 
+// Order data where ERC20 is received and ERC1155 is sent
 const orderERC20InERC1155OutStruct = {
   maker: "0x000075B45Dff84C00Cf597d5C3E766108CeA0000".toLowerCase(),
   makeAsset: {
@@ -131,6 +135,7 @@ const orderERC20InERC1155Out = [
   orderERC20InERC1155OutStruct.data,
 ];
 
+// Order data where ETH is received and ERC721 is sent
 const orderETHInERC721OutStruct = {
   maker: "0x000075B45Dff84C00Cf597d5C3E766108CeA0000".toLowerCase(),
   makeAsset: {

@@ -6,12 +6,21 @@ const {
   orderErc1155InEthOut,
   orderETHInERC721Out,
 } = require("../utils/raribleData");
+
+/**
+ * @dev Tests for ERC6865Registry.sol
+ * @author @gabrielantonyxaviour
+ * @notice RaribleEIP712Visualizer is a contract that decodes EIP-712 message data in the Rarible Protocol
+ */
 describe("RaribleEIP712Visualizer", function () {
   let RaribleEIP712Visualizer;
+
+  // EIP-712 domain separator hash for Rarible
   const DOMAIN_SEPARATOR =
     "0x36c25de3e541d5d970f66e4210d728721220fff5c077cc6cd008b3a0c62adab7";
 
   beforeEach(async function () {
+    // Deploy RaribleEIP712Visualizer contract
     const RaribleEIP712VisualizerFactory = await ethers.getContractFactory(
       "RaribleEIP712Visualizer"
     );
@@ -20,16 +29,21 @@ describe("RaribleEIP712Visualizer", function () {
   });
 
   it("Should revert when visualizing EIP712 message due to incorrect domain separator", async function () {
+    // Obtaining the encoded EIP712 message of the Rarble Order
     const encodedWithoutLength = ethers.utils.defaultAbiCoder.encode(
       types,
       orderErc1155InEthOut
     );
+    // To mimic Solidity's abi.encode in ethers.js, manually add the length of the dynamic data, "bytes" in types array,
+    // to the start of the encoded output
     const lengthPadded =
       "0x0000000000000000000000000000000000000000000000000000000000000020";
     const encodedMessage = lengthPadded + encodedWithoutLength.slice(2);
 
     const INCORRECT_DOMAIN_SEPARATOR =
       "0x96c25de3e541d5d970f66e4210d728721220fff5c077cc6cd008b3a0c62adab7";
+
+    // Expect the call to revert due to incorrect domain separator
     await expect(
       RaribleEIP712Visualizer.visualizeEIP712Message(
         encodedMessage,
@@ -39,10 +53,13 @@ describe("RaribleEIP712Visualizer", function () {
   });
 
   it("Should return the correct values when calling visualizeEIP712message to decode ERC1155 In ETH Out Order", async function () {
+    // Obtaining the encoded EIP712 message of the Rarble Order
     const encodedWithoutLength = ethers.utils.defaultAbiCoder.encode(
       types,
       orderErc1155InEthOut
     );
+    // To mimic Solidity's abi.encode in ethers.js, manually add the length of the dynamic data, "bytes" in types array,
+    // to the start of the encoded output
     const lengthPadded =
       "0x0000000000000000000000000000000000000000000000000000000000000020";
     const encodedMessage = lengthPadded + encodedWithoutLength.slice(2);
@@ -69,6 +86,7 @@ describe("RaribleEIP712Visualizer", function () {
       },
     };
 
+    // Expected result of the EIP712 Visualization of the Rarible Order
     const expectedResult = {
       assetsIn: [
         {
@@ -90,13 +108,17 @@ describe("RaribleEIP712Visualizer", function () {
       },
     };
 
+    // Check that the result matches the expected result
     expect(mappedResult).to.deep.equal(expectedResult);
   });
   it("Should return the correct values when calling visualizeEIP712message to decode ERC20 In ERC1155 Out Order", async function () {
+    // Obtaining the encoded EIP712 message of the Rarble Order
     const encodedWithoutLength = ethers.utils.defaultAbiCoder.encode(
       types,
       orderERC20InERC1155Out
     );
+    // To mimic Solidity's abi.encode in ethers.js, manually add the length of the dynamic data, "bytes" in types array,
+    // to the start of the encoded output
     const lengthPadded =
       "0x0000000000000000000000000000000000000000000000000000000000000020";
     const encodedMessage = lengthPadded + encodedWithoutLength.slice(2);
@@ -123,6 +145,7 @@ describe("RaribleEIP712Visualizer", function () {
       },
     };
 
+    // Expected result of the EIP712 Visualization of the Rarible Order
     const expectedResult = {
       assetsIn: [
         {
@@ -145,13 +168,17 @@ describe("RaribleEIP712Visualizer", function () {
       },
     };
 
+    // Check that the result matches the expected result
     expect(mappedResult).to.deep.equal(expectedResult);
   });
   it("Should return the correct values when calling visualizeEIP712message to decode ETH In ERC721 Out Order", async function () {
+    // Obtaining the encoded EIP712 message of the Rarble Order
     const encodedWithoutLength = ethers.utils.defaultAbiCoder.encode(
       types,
       orderETHInERC721Out
     );
+    // To mimic Solidity's abi.encode in ethers.js, manually add the length of the dynamic data, "bytes" in types array,
+    // to the start of the encoded output
     const lengthPadded =
       "0x0000000000000000000000000000000000000000000000000000000000000020";
     const encodedMessage = lengthPadded + encodedWithoutLength.slice(2);
@@ -178,6 +205,7 @@ describe("RaribleEIP712Visualizer", function () {
       },
     };
 
+    // Expected result of the EIP712 Visualization of the Rarible Order
     const expectedResult = {
       assetsIn: [
         {
@@ -199,6 +227,7 @@ describe("RaribleEIP712Visualizer", function () {
       },
     };
 
+    // Check that the result matches the expected result
     expect(mappedResult).to.deep.equal(expectedResult);
   });
 });
